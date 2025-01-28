@@ -28,6 +28,6 @@ contract Logic2 {
     uint public x = 255;
 
     function changeX(uint _x) external {
-        x = _x;
+        x = x * _x;
     }
 }

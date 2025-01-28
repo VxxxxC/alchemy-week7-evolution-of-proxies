@@ -36,27 +36,20 @@ describe("Proxy", function () {
     expect(res2).to.be.equal(100);
   });
 
-  describe("should work with upgrade", async function () {
+  it("should work with upgrade", async function () {
     const { proxy, logic1, logic2 } = await loadFixture(deployFixture);
 
-    it("before the upgrade", async function () {
-      await proxy.changeImplementation(logic1.getAddress());
-      const res1 = await logic1.x();
-      expect(res1).to.be.equal(255);
-      await proxy.changeX(100);
-      const res2 = await logic1.x();
-      expect(res2).to.be.equal(100);
-    });
+    console.log("Before upgrade :");
+    await proxy.changeImplementation(logic1.getAddress());
+    expect(await logic1.x()).to.be.equal(255);
+    await proxy.changeX(100); // NOTE: here we change logic1 contract "x" value
+    expect(await logic1.x()).to.be.equal(100); // changed logic1 "x" value = 100
 
-    it("after the upgrade", async function () {
-      await proxy.changeImplementation(logic2.getAddress());
-      const res1 = await logic2.x();
-      expect(res1).to.be.equal(255);
-      await proxy.changeX(100);
-      const res2 = await logic1.x();
-      expect(res2).to.be.equal(100);
-      const res3 = await logic2.x();
-      expect(res3).to.be.equal(100);
-    });
+    console.log("After upgrade :");
+    await proxy.changeImplementation(logic2.getAddress()); // implement the logic2 contract
+    expect(await logic2.x()).to.be.equal(255);
+    await proxy.changeX(25); // NOTE: here we change the logic2 contract "x" value
+    expect(await logic1.x()).to.be.equal(100); // logic1 "x" still the same value = 100
+    expect(await logic2.x()).to.be.equal(6375); // logic2 "x" value changed to 25
   });
 });
