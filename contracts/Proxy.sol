@@ -28,7 +28,7 @@ contract Logic1 {
 }
 
 contract Logic2 {
-    uint public x = 255;
+    uint x = 255;
 
     function multiplyX(uint _x) external {
         x = x * _x;

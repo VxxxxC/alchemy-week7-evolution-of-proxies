@@ -46,18 +46,18 @@ describe("Proxy", function () {
     const { proxy, logic1, proxyAsLogic1 } = await loadFixture(deployFixture);
     await proxy.changeImplementation(logic1.getAddress());
 
-    //NOTE: THERE'S TWO DIFFERENT METHOD TO GET THE [0x0] SLOT VALUE :
-    // METHOD 1 :
+    //NOTE: THERE'S TWO DIFFERENT METHOD TO GET THE [0x0] SLOT VALUE
+    // METHOD 1 (lookup by getStorage , can get the value even not a public getter variable):
     console.log(
       "logic 1 [0x0] slot value ( without public getter) :",
       await lookupUint(logic1.getAddress(), "0x0")
     );
     //NOTE:
-    //METHOD 2 :
+    //METHOD 2 (contract variable must have with public getter):
     const res1 = await logic1.x();
     console.log("logic 1 [0x0] slot value (using public getter) : ", res1);
 
-    //WARN: [getStorage] FUNCTION FROM ETHERS.JS CAN GET VALUE , EVEN NOT A "public" VARIABLE IN THE CONTRACT
+    //WARN: [getStorage] FUNCTION FROM ETHERS.JS CAN GET VALUE , EVEN NOT A "public" VARIABLE IN THE CONTRACT.
     console.log(
       "getting logic 1 [0x1] slot value ( using 'getStorage' function ) : ",
       await lookupUint(logic1.getAddress(), "0x1")
@@ -67,7 +67,7 @@ describe("Proxy", function () {
       console.log(
         "getting logci 1 [0x1] slot value ( use default getter method ) : ",
         await logic1.y()
-      ); //BUG: IT WILL SHOWN ERROR [logic1.y is no a function], AS THE VARIABLE NOT STATE AS "public" IN SOLIDITY CONTRACT
+      ); //BUG: IT WILL SHOWN ERROR [logic1.y is no a function], AS THE VARIABLE NOT STATE AS "public" IN SOLIDITY CONTRACT.
     } catch (e) {
       console.error(e);
     }
