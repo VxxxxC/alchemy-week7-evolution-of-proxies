@@ -2,7 +2,7 @@
 pragma solidity ^0.8.28;
 
 // Uncomment this line to use console.log
-// import "hardhat/console.sol";
+import "hardhat/console.sol";
 
 contract Proxy {
     address implementation;
@@ -11,13 +11,16 @@ contract Proxy {
         implementation = _implementation;
     }
 
-    function changeX(uint _x) external {
-        Logic1(implementation).changeX(_x);
+    fallback() external {
+        console.logBytes(msg.data);
+        (bool s, ) = implementation.call(msg.data);
+        require(s);
     }
 }
 
 contract Logic1 {
     uint public x = 255;
+    uint y = 100;
 
     function changeX(uint _x) external {
         x = _x;
@@ -27,7 +30,7 @@ contract Logic1 {
 contract Logic2 {
     uint public x = 255;
 
-    function changeX(uint _x) external {
+    function multiplyX(uint _x) external {
         x = x * _x;
     }
 }
