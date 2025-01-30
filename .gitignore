@@ -1,6 +1,9 @@
 node_modules
 .env
 
+#IDE
+.vscode
+
 # Hardhat files
 /cache
 /artifacts
