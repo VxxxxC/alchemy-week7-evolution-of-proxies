@@ -3,18 +3,23 @@ pragma solidity ^0.8.28;
 
 // Uncomment this line to use console.log
 import "hardhat/console.sol";
+import "./StorageSlot.sol";
 
 contract Proxy {
     uint x = 0; //NOTE: slot: 0x0
-    address implementation; //NOTE: slot: 0x1
 
     function changeImplementation(address _implementation) external {
-        implementation = _implementation;
+        StorageSlot
+            .getAddressSlot(keccak256("implementation"))
+            .value = _implementation;
     }
 
     fallback() external {
         console.logBytes(msg.data);
-        (bool s, ) = implementation.delegatecall(msg.data);
+        (bool s, ) = StorageSlot
+            .getAddressSlot(keccak256("implementation"))
+            .value
+            .delegatecall(msg.data);
         require(s);
     }
 }
