@@ -72,9 +72,9 @@ describe("Proxy", function () {
       console.error(e);
     }
 
-    expect(await lookupUint(logic1.getAddress(), "0x0")).to.be.equal(255);
+    expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(0);
     await proxyAsLogic1.changeX(100);
-    expect(await lookupUint(logic1.getAddress(), "0x0")).to.be.equal(100);
+    expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(100);
   });
 
   it("should work with upgrade", async function () {
@@ -83,15 +83,14 @@ describe("Proxy", function () {
 
     console.log("Before upgrade :");
     await proxy.changeImplementation(logic1.getAddress());
-    expect(await lookupUint(logic1.getAddress(), "0x0")).to.be.equal(255);
+    expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(0);
     await proxyAsLogic1.changeX(100); // NOTE: here we change logic1 contract "x" value
-    expect(await lookupUint(logic1.getAddress(), "0x0")).to.be.equal(100); // changed logic1 "x" value = 100
+    expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(100); // changed logic1 "x" value = 100
 
     console.log("After upgrade :");
     await proxy.changeImplementation(logic2.getAddress()); // implement the logic2 contract
-    expect(await lookupUint(logic2.getAddress(), "0x0")).to.be.equal(255);
+    expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(100);
     await proxyAsLogic2.multiplyX(25); // NOTE: here we change the logic2 contract "x" value
-    expect(await lookupUint(logic1.getAddress(), "0x0")).to.be.equal(100); // logic1 "x" still the same value = 100
-    expect(await lookupUint(logic2.getAddress(), "0x0")).to.be.equal(6375); // logic2 "x" value changed to 255 * 25 = 6375
+    expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(2500); // logic1 "x" still the same value = 100
   });
 });

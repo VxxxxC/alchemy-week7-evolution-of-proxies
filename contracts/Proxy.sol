@@ -5,8 +5,8 @@ pragma solidity ^0.8.28;
 import "hardhat/console.sol";
 
 contract Proxy {
-    address implementation;
     uint x = 0;
+    address implementation;
 
     function changeImplementation(address _implementation) external {
         implementation = _implementation;
@@ -14,7 +14,7 @@ contract Proxy {
 
     fallback() external {
         console.logBytes(msg.data);
-        (bool s, ) = implementation.call(msg.data);
+        (bool s, ) = implementation.delegatecall(msg.data);
         require(s);
     }
 }
