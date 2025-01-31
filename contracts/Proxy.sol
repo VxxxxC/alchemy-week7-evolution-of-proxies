@@ -5,8 +5,8 @@ pragma solidity ^0.8.28;
 import "hardhat/console.sol";
 
 contract Proxy {
-    uint x = 0;
-    address implementation;
+    uint x = 0; //NOTE: slot: 0x0
+    address implementation; //NOTE: slot: 0x1
 
     function changeImplementation(address _implementation) external {
         implementation = _implementation;

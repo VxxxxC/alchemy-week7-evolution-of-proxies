@@ -81,12 +81,13 @@ describe("Proxy", function () {
     const { proxy, logic1, logic2, proxyAsLogic1, proxyAsLogic2 } =
       await loadFixture(deployFixture);
 
-    console.log("Before upgrade :");
+    //NOTE: Upgraded to Logic 1
     await proxy.changeImplementation(logic1.getAddress());
     expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(0);
     await proxyAsLogic1.changeX(100); // NOTE: here we change logic1 contract "x" value
     expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(100); // changed logic1 "x" value = 100
 
+    //NOTE: Upgraded to Logic 2
     console.log("After upgrade :");
     await proxy.changeImplementation(logic2.getAddress()); // implement the logic2 contract
     expect(await lookupUint(proxy.getAddress(), "0x0")).to.be.equal(100);
