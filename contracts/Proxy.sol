@@ -6,6 +6,7 @@ import "hardhat/console.sol";
 
 contract Proxy {
     address implementation;
+    uint x = 0;
 
     function changeImplementation(address _implementation) external {
         implementation = _implementation;
@@ -19,7 +20,7 @@ contract Proxy {
 }
 
 contract Logic1 {
-    uint public x = 255;
+    uint x = 255;
     uint y = 100;
 
     function changeX(uint _x) external {
